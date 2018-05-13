@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace bsk2v2.Models
+namespace bsk2v2.ViewModels
 {
     public class ExternalLoginConfirmationViewModel
     {
@@ -31,6 +31,7 @@ namespace bsk2v2.Models
         [Required]
         [Display(Name = "Code")]
         public string Code { get; set; }
+
         public string ReturnUrl { get; set; }
 
         [Display(Name = "Remember this browser?")]
