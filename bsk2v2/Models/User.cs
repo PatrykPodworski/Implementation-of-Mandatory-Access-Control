@@ -13,8 +13,8 @@ namespace bsk2v2.Models
         public string Email { get; set; }
 
         [Required]
-        public int ControlLevelId { get; set; }
+        public int CleranceLevelId { get; set; }
 
-        public ControlLevel ControlLevel { get; set; }
+        public ControlLevel CleranceLevel { get; set; }
     }
 }

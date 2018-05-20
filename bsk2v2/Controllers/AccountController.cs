@@ -101,7 +101,7 @@ namespace bsk2v2.Controllers
                 using (var context = new ApplicationDbContext())
                 {
                     var levelId = context.ControlLevels.OrderBy(x => x.Level).Select(x => x.Id).FirstOrDefault();
-                    var userInfo = new User { Name = model.Email, Email = model.Email, ControlLevelId = levelId };
+                    var userInfo = new User { Name = model.Email, Email = model.Email, CleranceLevelId = levelId };
                     var user = new ApplicationUser { UserName = model.Email, Email = model.Email, UserInfo = userInfo };
 
                     var result = await UserManager.CreateAsync(user, model.Password);

@@ -1,0 +1,36 @@
+﻿@using bsk2v2.ViewModels
+@model RecipeIndexViewModel
+
+<p>
+    @Html.ActionLink("Add new recipe", "Create", "Recipe")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(m => m.Recipes.First().Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(m => m.Recipes.First().AuthorName)
+        </th>
+        <th>
+            Actions
+        </th>
+    </tr>
+
+    @foreach (var recipe in Model.Recipes)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => recipe.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => recipe.AuthorName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = recipe.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = recipe.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = recipe.Id })
+            </td>
+        </tr>
+    }
+</table>
