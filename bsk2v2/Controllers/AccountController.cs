@@ -1,10 +1,8 @@
-﻿using bsk2v2.Models;
-using bsk2v2.Services;
+﻿using bsk2v2.Services;
 using bsk2v2.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -168,41 +166,6 @@ namespace bsk2v2.Controllers
 
                 return RedirectToAction("List");
             }
-        }
-
-        // GET: /Account/Register
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-        // POST: /Account/Register
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // add username
-                using (var context = new ApplicationDbContext())
-                {
-                    var levelId = context.ControlLevels.OrderBy(x => x.Level).Select(x => x.Id).FirstOrDefault();
-                    var userInfo = new User { Name = model.Email, Email = model.Email, CleranceLevelId = levelId };
-                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email, UserInfo = userInfo };
-
-                    var result = await UserManager.CreateAsync(user, model.Password);
-
-                    if (result.Succeeded)
-                    {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToAction("Index", "Home");
-                    }
-                    AddErrors(result);
-                }
-            }
-            return View(model);
         }
 
         // POST: /Account/LogOff
