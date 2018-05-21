@@ -98,4 +98,41 @@ namespace bsk2v2.ViewModels
                 .ToList();
         }
     }
+
+    public class RecipeEditViewModel
+    {
+        [Required]
+        public int Id { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Recipe")]
+        public string Text { get; set; }
+
+        [Required]
+        public int ClassificationLevel { get; set; }
+
+        public ICollection<SelectListItem> ClassificationLevels { get; set; }
+
+        public RecipeEditViewModel()
+        {
+        }
+
+        public RecipeEditViewModel(Recipe recipe, ICollection<ControlLevel> classificationLevels)
+        {
+            Id = recipe.Id;
+            Name = recipe.Name;
+            Text = recipe.Text;
+            ClassificationLevel = ClassificationLevel;
+            ClassificationLevels = classificationLevels
+                .Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Level.ToString()
+                })
+                .ToList();
+        }
+    }
 }

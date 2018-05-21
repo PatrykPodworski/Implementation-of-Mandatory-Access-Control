@@ -48,7 +48,6 @@ namespace bsk2v2.Controllers
             }
         }
 
-        // POST: Recipe/Create
         [HttpPost]
         public ActionResult Create(RecipeCreateViewModel model)
         {
@@ -73,25 +72,54 @@ namespace bsk2v2.Controllers
             }
         }
 
-        // GET: Recipe/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            using (var context = new ApplicationDbContext())
+            {
+                var recipeService = new RecipeService(context, HttpContext);
+                var recipe = recipeService.GetRecipe(id);
+
+                if (recipe == null)
+                {
+                    return HttpNotFound();
+                }
+
+                var userService = new UserService(context, HttpContext);
+                var classificationLevels = userService.GetAvailableClassificationLevels();
+                var viewModel = new RecipeEditViewModel(recipe, classificationLevels);
+                return View(viewModel);
+            }
         }
 
-        // POST: Recipe/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(RecipeEditViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             try
             {
-                // TODO: Add update logic here
+                using (var context = new ApplicationDbContext())
+                {
+                    var recipeService = new RecipeService(context, HttpContext);
+                    recipeService.Edit(model);
+                    context.SaveChanges();
 
-                return RedirectToAction("Index");
+                    var recipe = recipeService.GetRecipe(model.Id);
+
+                    if (recipe == null)
+                    {
+                        return RedirectToAction("Index");
+                    }
+
+                    return RedirectToAction("Details", new { id = model.Id });
+                }
             }
             catch
             {
-                return View();
+                return View(model);
             }
         }
 
