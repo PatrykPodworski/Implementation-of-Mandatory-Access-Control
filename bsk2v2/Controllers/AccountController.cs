@@ -138,6 +138,38 @@ namespace bsk2v2.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult Delete(string id)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var userService = new UserService(context, HttpContext);
+                var user = userService.GetById(id);
+
+                if (user == null)
+                {
+                    return HttpNotFound();
+                }
+
+                var viewModel = new UserDeleteViewModel(user);
+                return View(viewModel);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(UserDeleteViewModel model)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var userService = new UserService(context, HttpContext);
+                userService.Delete(model);
+                context.SaveChanges();
+
+                return RedirectToAction("List");
+            }
+        }
+
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()

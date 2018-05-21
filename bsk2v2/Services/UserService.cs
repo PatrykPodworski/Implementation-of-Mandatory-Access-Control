@@ -65,7 +65,7 @@ namespace bsk2v2.Services
             return await userManager.CreateAsync(user, model.Password);
         }
 
-        internal ICollection<ApplicationUser> GetAvailableUsers()
+        public ICollection<ApplicationUser> GetAvailableUsers()
         {
             var cleranceLevel = GetCurrentUserCleranceLevel();
 
@@ -78,6 +78,36 @@ namespace bsk2v2.Services
                 .ToList();
 
             return users;
+        }
+
+        public ApplicationUser GetById(string id)
+        {
+            var cleranceLevel = GetCurrentUserCleranceLevel();
+
+            var user = _context.Users
+                .Include(x => x.UserInfo.CleranceLevel)
+                .FirstOrDefault(x => x.Id == id);
+
+            if (user.UserInfo.CleranceLevel.Level <= cleranceLevel.Level)
+            {
+                return user;
+            }
+
+            return null;
+        }
+
+        public void Delete(UserDeleteViewModel model)
+        {
+            var userCleranceLevel = GetCurrentUserCleranceLevel();
+
+            if (userCleranceLevel.Level < model.CleranceLevel)
+            {
+                return;
+            }
+
+            var user = new ApplicationUser { Id = model.Id };
+            _context.Users.Attach(user);
+            _context.Entry(user).State = EntityState.Deleted;
         }
     }
 }

@@ -70,4 +70,31 @@ namespace bsk2v2.ViewModels
             CleranceLevel = user.UserInfo.CleranceLevel.Name;
         }
     }
+
+    public class UserDeleteViewModel
+    {
+        [Required]
+        public string Id { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public string CleranceLevelName { get; set; }
+
+        [Required]
+        public int CleranceLevel { get; set; }
+
+        public UserDeleteViewModel()
+        {
+        }
+
+        public UserDeleteViewModel(ApplicationUser user)
+        {
+            Id = user.Id;
+            Name = user.UserInfo.Name;
+            CleranceLevelName = user.UserInfo.CleranceLevel.Name;
+            CleranceLevel = user.UserInfo.CleranceLevel.Level;
+        }
+    }
 }
