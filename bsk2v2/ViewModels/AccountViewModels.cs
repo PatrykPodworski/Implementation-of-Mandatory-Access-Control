@@ -50,9 +50,7 @@ namespace bsk2v2.ViewModels
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        public string Name { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

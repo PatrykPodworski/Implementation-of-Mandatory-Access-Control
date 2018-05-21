@@ -1,4 +1,5 @@
 ﻿using bsk2v2.Models;
+using bsk2v2.Services;
 using bsk2v2.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -69,7 +70,7 @@ namespace bsk2v2.Controllers
                 return View(model);
             }
 
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Name, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -79,6 +80,61 @@ namespace bsk2v2.Controllers
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Create()
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var userService = new UserService(context, HttpContext);
+                var cleranceLevel = userService.GetCurrentUserCleranceLevel();
+
+                var controlLevelService = new ControlLevelService(context);
+                var controlLevels = controlLevelService.GetReadableFor(cleranceLevel);
+
+                var model = new UserCreateViewModel(controlLevels);
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(UserCreateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            using (var context = new ApplicationDbContext())
+            {
+                var userService = new UserService(context, HttpContext);
+                var result = await userService.Add(model);
+                context.SaveChanges();
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("List");
+                }
+
+                AddErrors(result);
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult List()
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var userService = new UserService(context, HttpContext);
+                var users = userService.GetAvailableUsers();
+
+                var viewModel = new UserListViewModel(users);
+
+                return View(viewModel);
             }
         }
 

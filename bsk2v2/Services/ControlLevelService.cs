@@ -26,5 +26,12 @@ namespace bsk2v2.Services
                 .FirstOrDefault(x => x.Level == level)
                 .Id;
         }
+
+        internal ICollection<ControlLevel> GetReadableFor(ControlLevel cleranceLevel)
+        {
+            return _context.ControlLevels
+                .Where(x => x.Level <= cleranceLevel.Level)
+                .ToList();
+        }
     }
 }
