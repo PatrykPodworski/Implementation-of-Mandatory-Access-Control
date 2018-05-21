@@ -27,9 +27,14 @@ namespace bsk2v2.Controllers
                 var recipeService = new RecipeService(context, HttpContext);
                 var recipe = recipeService.GetRecipe(id);
 
+                if (recipe == null)
+                {
+                    return HttpNotFound();
+                }
+
                 var viewModel = new RecipeDetailsViewModel(recipe);
+                return View(viewModel);
             }
-            return View();
         }
 
         public ActionResult Create()
@@ -58,6 +63,7 @@ namespace bsk2v2.Controllers
                 {
                     var recipeService = new RecipeService(context, HttpContext);
                     recipeService.Add(model);
+                    context.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
