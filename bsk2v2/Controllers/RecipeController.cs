@@ -123,25 +123,45 @@ namespace bsk2v2.Controllers
             }
         }
 
-        // GET: Recipe/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            using (var context = new ApplicationDbContext())
+            {
+                var recipeService = new RecipeService(context, HttpContext);
+                var recipe = recipeService.GetRecipe(id);
+
+                if (recipe == null)
+                {
+                    return HttpNotFound();
+                }
+
+                var viewModel = new RecipeDeleteViewModel(recipe);
+                return View(viewModel);
+            }
         }
 
-        // POST: Recipe/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(RecipeDeleteViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             try
             {
-                // TODO: Add delete logic here
+                using (var context = new ApplicationDbContext())
+                {
+                    var recipeService = new RecipeService(context, HttpContext);
+                    recipeService.Delete(model);
+                    context.SaveChanges();
 
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
+                }
             }
             catch
             {
-                return View();
+                return View(model);
             }
         }
     }

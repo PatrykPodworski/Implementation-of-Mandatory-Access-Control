@@ -135,4 +135,37 @@ namespace bsk2v2.ViewModels
                 .ToList();
         }
     }
+
+    public class RecipeDeleteViewModel
+    {
+        [Required]
+        public int Id { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Recipe")]
+        public string Text { get; set; }
+
+        [Required]
+        [Display(Name = "Author")]
+        public string AuthorName { get; set; }
+
+        [Required]
+        public int ClassificationLevel { get; set; }
+
+        public RecipeDeleteViewModel()
+        {
+        }
+
+        public RecipeDeleteViewModel(Recipe recipe)
+        {
+            Id = recipe.Id;
+            Name = recipe.Name;
+            Text = recipe.Text;
+            AuthorName = recipe.Author.Name;
+            ClassificationLevel = recipe.ClassificationLevel.Level;
+        }
+    }
 }

@@ -75,5 +75,20 @@ namespace bsk2v2.Services
             _context.Recipes.Attach(recipe);
             _context.Entry(recipe).State = EntityState.Modified;
         }
+
+        internal void Delete(RecipeDeleteViewModel model)
+        {
+            var userService = new UserService(_context, _httpContext);
+            var userCleranceLevel = userService.GetCurrentUserCleranceLevel();
+
+            if (userCleranceLevel.Level < model.ClassificationLevel)
+            {
+                return;
+            }
+
+            var recipe = new Recipe { Id = model.Id };
+            _context.Recipes.Attach(recipe);
+            _context.Entry(recipe).State = EntityState.Deleted;
+        }
     }
 }
