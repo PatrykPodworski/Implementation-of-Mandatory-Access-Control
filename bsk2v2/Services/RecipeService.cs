@@ -57,23 +57,33 @@ namespace bsk2v2.Services
 
         internal void Edit(RecipeEditViewModel model)
         {
+            var userService = new UserService(_context, _httpContext);
+            var cleranceLevel = userService.GetCurrentUserCleranceLevel();
+
+            var recipe = GetById(model.Id);
+
+            if (cleranceLevel.Level < recipe.ClassificationLevel.Level)
+            {
+                return;
+            }
+
             var controlLevelService = new ControlLevelService(_context);
             var classificationLevelId = controlLevelService.GetIdByLevel(model.ClassificationLevel);
 
-            var userService = new UserService(_context, _httpContext);
             var authorId = userService.GetCurrentUserId();
 
-            var recipe = new Recipe
-            {
-                Id = model.Id,
-                Name = model.Name,
-                Text = model.Text,
-                ClassificationLevelId = classificationLevelId,
-                AuthorId = authorId
-            };
+            recipe.Id = model.Id;
+            recipe.Name = model.Name;
+            recipe.Text = model.Text;
+            recipe.ClassificationLevelId = classificationLevelId;
+            recipe.AuthorId = authorId;
 
-            _context.Recipes.Attach(recipe);
             _context.Entry(recipe).State = EntityState.Modified;
+        }
+
+        private Recipe GetById(int id)
+        {
+            return _context.Recipes.SingleOrDefault(x => x.Id == id);
         }
 
         internal void Delete(RecipeDeleteViewModel model)
