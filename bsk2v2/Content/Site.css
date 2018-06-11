@@ -22,3 +22,8 @@ select,
 textarea {
     max-width: 280px;
 }
+
+textarea.bigtext {
+    max-width: 700px;
+    height: 120px;
+}
