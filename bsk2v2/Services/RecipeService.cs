@@ -23,10 +23,12 @@ namespace bsk2v2.Services
             var userService = new UserService(_context, _httpContext);
             var userCleranceLevel = userService.GetCurrentUserCleranceLevel();
 
-            return _context.Recipes.Where(x => x.ClassificationLevel.Level <= userCleranceLevel.Level).ToList();
+            return _context.Recipes
+                .Where(x => x.ClassificationLevel.Level <= userCleranceLevel.Level)
+                .ToList();
         }
 
-        internal Recipe GetRecipe(int id)
+        public Recipe GetRecipe(int id)
         {
             var userService = new UserService(_context, _httpContext);
             var userCleranceLevel = userService.GetCurrentUserCleranceLevel();

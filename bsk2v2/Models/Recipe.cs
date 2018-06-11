@@ -9,12 +9,12 @@ namespace bsk2v2.Models
         [Required]
         public int ClassificationLevelId { get; set; }
 
-        public ControlLevel ClassificationLevel { get; set; }
+        public virtual ControlLevel ClassificationLevel { get; set; }
 
         [Required]
         public int AuthorId { get; set; }
 
-        public User Author { get; set; }
+        public virtual User Author { get; set; }
 
         [Required]
         public string Name { get; set; }

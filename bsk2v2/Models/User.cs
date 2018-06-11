@@ -15,6 +15,6 @@ namespace bsk2v2.Models
         [Required]
         public int CleranceLevelId { get; set; }
 
-        public ControlLevel CleranceLevel { get; set; }
+        public virtual ControlLevel CleranceLevel { get; set; }
     }
 }
