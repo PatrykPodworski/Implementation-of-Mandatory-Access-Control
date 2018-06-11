@@ -31,12 +31,16 @@ namespace bsk2v2.ViewModels
         [Required]
         public int AuthorId { get; set; }
 
+        [Required]
+        public string ClassificationLevel { get; set; }
+
         public RecipeIndexPartModel(Recipe recipe)
         {
             Id = recipe.Id;
             Name = recipe.Name;
             AuthorName = recipe.Author.Name;
             AuthorId = recipe.AuthorId;
+            ClassificationLevel = recipe.ClassificationLevel.Name;
         }
     }
 
@@ -57,6 +61,10 @@ namespace bsk2v2.ViewModels
         public string AuthorName { get; set; }
 
         [Required]
+        [Display(Name = "Classification Level")]
+        public string ClassificationLevel { get; set; }
+
+        [Required]
         public int AuthorId { get; set; }
 
         public RecipeDetailsViewModel(Recipe recipe)
@@ -66,6 +74,7 @@ namespace bsk2v2.ViewModels
             Text = recipe.Text;
             AuthorName = recipe.Author.Name;
             AuthorId = recipe.AuthorId;
+            ClassificationLevel = recipe.ClassificationLevel.Name;
         }
     }
 
@@ -112,6 +121,7 @@ namespace bsk2v2.ViewModels
         public string Text { get; set; }
 
         [Required]
+        [Display(Name = "Classification Level")]
         public int ClassificationLevel { get; set; }
 
         public ICollection<SelectListItem> ClassificationLevels { get; set; }
